@@ -42,9 +42,9 @@
     },
     "_execute_browser_action": {
       "suggested_key": {
-        "default": "Ctrl+Shift+E",
-        "windows": "Alt+Shift+P",
-        "mac": "Command+Shift+P"
+        "default": "Ctrl+Shift+S",
+        "windows": "Alt+Shift+S",
+        "mac": "Command+Shift+S"
       }
     }
   },

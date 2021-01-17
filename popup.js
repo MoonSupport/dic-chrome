@@ -83,3 +83,4 @@ function searchWord(word) {
     versatile.innerHTML=''
     card__text.innerHTML = NO_CONTENT_ELEMENT
 }
+

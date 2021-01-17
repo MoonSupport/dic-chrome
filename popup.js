@@ -53,14 +53,16 @@ const NO_CONTENT_ELEMENT = `
                     <a target="_blank" href="https://github.com/meotitda/DICTIONARY">→ 단어 추가 메뉴얼</a>
                    </div>
                    `;
+
 function searchWord(word) {
     chrome.runtime.sendMessage(
         {handler: 'translate', word}, function(response) {
         switch(response.type) {
             case 'recommand':
-                versatile.innerHTML="추천 검색어<br>"
-               response.recommands.map((recommand)=> {
+                versatile.innerHTML="<span style='color:red;'>추천 검색어</span><br>"
+               response.recommands.map((recommand, index)=> {
                    const element = document.createElement('span')
+                   element.className = "recommanded_word"
                    element.innerText = recommand.title + " "
                    versatile.appendChild(element)
                    card__text.innerHTML = NO_CONTENT_ELEMENT

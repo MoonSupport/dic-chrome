@@ -1,7 +1,7 @@
 import Options from './lib/options'
 
-const URL = (word) => `http://localhost:4000/word/find/${word}`
-const URL2 = (word) => `http://localhost:4000/word/fuzzy/${word}`
+const URL = (word) => `http://ec2-54-180-81-156.ap-northeast-2.compute.amazonaws.com:4000/word/find/${word}`
+const URL2 = (word) => `http://ec2-54-180-81-156.ap-northeast-2.compute.amazonaws.com:4000/word/fuzzy/${word}`
 
 const translate =  (word, sendResponse) => {
     $.ajax({

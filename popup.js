@@ -1,7 +1,7 @@
 const search = document.getElementById('search')
 const versatile = document.getElementById('versatile')
 const card__text = document.getElementById('card__text')
-const DEBOUNCE_DURATION = 1500; 
+const DEBOUNCE_DURATION = 1000; 
 
 $('.loader').css("display", "none");
 
@@ -77,7 +77,7 @@ function searchWord(word) {
                 break
             case 'find':
                 versatile.innerHTML=''
-                card__text.innerHTML = response.word.content.replaceAll('<br />', '<br /><br />')
+                card__text.innerHTML = response.word.content.replaceAll('<br />', '<br /><br />').replaceAll('```' ,'<code>')
                 break
             case 'no_find':
                 versatile.innerHTML=''

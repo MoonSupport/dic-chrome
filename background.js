@@ -1,32 +1,49 @@
 import Options from './lib/options'
-
-const URL = (word) => `http://ec2-54-180-81-156.ap-northeast-2.compute.amazonaws.com:4000/word/find/${word}`
-const URL2 = (word) => `http://ec2-54-180-81-156.ap-northeast-2.compute.amazonaws.com:4000/word/fuzzy/${word}`
+import { ACCESS_KEY, URL } from './config'
 
 const translate =  (word, sendResponse) => {
     $.ajax({
-        url: URL(word),
-        type: 'GET',
+        url: URL,
+        type: "POST",
+        accept: "application/json",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+            "key": ACCESS_KEY,
+            "word" : word.trim()
+        }),
+        dataType: "json",
+        beforeSend: function() {
+            chrome.runtime.sendMessage({
+                loading: true
+            })
+        },
+        complete: function() {
+            chrome.runtime.sendMessage({
+                loading: false
+            })
+        },
         success: function on_success(data) {
-            if(!data?.content) {
-                $.ajax({
-                    url: URL2(word),
-                    type: 'GET',
-                    success: function on_success(data) {
+            console.log('data', data)
+                switch(data.type) {
+                    case 'find':
+                        sendResponse ({
+                            status : true,
+                            type:'find',
+                            word: data.value
+                        })
+                        break
+                    case 'recommand':
                         sendResponse ({
                             status : true,
                             type: 'recommand',
-                            recommands: data
+                            recommands: data.value
                         })
-                    }
-                })
-            } else {
-                sendResponse ({
-                    status : true,
-                    type:'find',
-                    word: data
-                })
-            }
+                    case 'no_find':
+                        sendResponse ({
+                            status : true,
+                            type: 'no_find',
+                        })
+                }
         },
         error: function(xhr, status, e) {
             sendResponse({
@@ -68,3 +85,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
     return true
 })
+
+// Recovery를 검색
+// Recover 에서 없어서 Recommand 요청
+// Recovery를 입력 후 결과 반환
+// Recovery 를 발견 후 Recoomand 결과 반환

@@ -1,1 +1,4 @@
 node_modules
+background.js
+*.zip
+config.js

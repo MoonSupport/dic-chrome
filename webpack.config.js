@@ -11,6 +11,7 @@ const config = {
     background: './background.js',
     contentscript: './contentscript.js',
     options_script: './lib/options_script.js',
+    config: './config.js',
     popup: './popup.js'
   },
   output: {

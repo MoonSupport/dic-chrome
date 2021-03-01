@@ -1,22 +1,32 @@
 const search = document.getElementById('search')
 const versatile = document.getElementById('versatile')
 const card__text = document.getElementById('card__text')
-const DEBOUNCE_DURATION = 500; 
+const DEBOUNCE_DURATION = 1500; 
+
+$('.loader').css("display", "none");
 
 addEventListener('DOMContentLoaded', ()=> {
+        search.focus()
         chrome.storage.sync.get('word', function(data) {
             if(!data.word) {
                 return
             }
             search.value = data.word
             searchWord(data.word)
-        }); 
+        });
 })
 
-
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if (request.loading) {
+            $('.loader').css("display", "block");
+        }else {
+            $('.loader').css("display", "none");
+        }
+    }
+);
 
 function debounce(callback, wait, context = this) {
-  
     let timeout = null;
     let callbackArgs = null;
 
@@ -29,16 +39,12 @@ function debounce(callback, wait, context = this) {
     };
 }
 
-search.addEventListener('input', (e)=> {
-    
-    versatile.innerHTML='검색중입니다.'
-
-    const debouncingSearchWord = debounce((word) => {
-        searchWord(word); 
+const debouncingSearchWord = debounce((e) => {
+        searchWord(e.target.value); 
       }, DEBOUNCE_DURATION)
 
-      debouncingSearchWord(e.target.value)
-})
+
+search.addEventListener('input', debouncingSearchWord)
 
 versatile.addEventListener('click' ,(e)=> {
     search.value = e.target.innerText
@@ -73,9 +79,11 @@ function searchWord(word) {
                 versatile.innerHTML=''
                 card__text.innerHTML = response.word.content.replaceAll('<br />', '<br /><br />')
                 break
-            default:
+            case 'no_find':
                 versatile.innerHTML=''
                 card__text.innerHTML = NO_CONTENT_ELEMENT
+                break
+            default:
         }
         return true
 
